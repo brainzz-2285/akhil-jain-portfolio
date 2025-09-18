@@ -40,7 +40,7 @@ jobs:
         run: yarn build
 
       - name: Add CNAME for custom domain
-        run: echo "aboutme.xyz.com" > frontend/build/CNAME
+        run: echo "aboutme.brainzz.com" > frontend/build/CNAME
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
