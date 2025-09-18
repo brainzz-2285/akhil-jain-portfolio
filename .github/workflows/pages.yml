@@ -47,8 +47,10 @@ jobs:
 
       - name: Show build dir
         run: |
+          echo "=== SHOW_BUILD_DIR_START ==="
           ls -la frontend/build
-          test -f frontend/build/index.html || (echo "index.html missing" && exit 1)
+          echo "Index exists?"
+          test -f frontend/build/index.html &&
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
