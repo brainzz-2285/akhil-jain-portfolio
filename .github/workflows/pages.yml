@@ -1,0 +1,59 @@
+name: Deploy React (frontend) to GitHub Pages
+
+on:
+  push:
+    branches: [ main ]
+    paths:
+      - "frontend/**"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "pages"
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: yarn
+          cache-dependency-path: frontend/yarn.lock
+
+      - name: Install deps
+        working-directory: frontend
+        run: yarn install --frozen-lockfile
+
+      - name: Build
+        working-directory: frontend
+        # if your package.json's build uses craco, this will just work
+        run: yarn build
+
+      - name: Add CNAME for custom domain
+        run: echo "aboutme.xyz.com" > frontend/build/CNAME
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: frontend/build
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
