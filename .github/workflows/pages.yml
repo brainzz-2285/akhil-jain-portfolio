@@ -50,7 +50,13 @@ jobs:
           echo "=== SHOW_BUILD_DIR_START ==="
           ls -la frontend/build
           echo "Index exists?"
-          test -f frontend/build/index.html &&
+          if test -f frontend/build/index.html; then
+            echo "YES"
+          else
+            echo "NO"
+            exit 1
+          fi
+          echo "=== SHOW_BUILD_DIR_END ==="
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
