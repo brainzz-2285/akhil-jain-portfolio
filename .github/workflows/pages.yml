@@ -42,6 +42,11 @@ jobs:
       - name: Add CNAME for custom domain
         run: echo "aboutme.brainzz.com" > frontend/build/CNAME
 
+      - name: Show build dir
+        run: |
+          ls -la frontend/build
+          test -f frontend/build/index.html
+
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
